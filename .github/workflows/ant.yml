@@ -1,12 +1,6 @@
 name: Java CI with Ant
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [push, pull_request]
 
 jobs:
   build:
@@ -14,16 +8,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v2
 
     - name: Set up JDK 11
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v1
       with:
         java-version: '11'
+        distribution: 'temurin'
 
     - name: Install Ant
       run: sudo apt-get install -y ant
 
     - name: Build with Ant
+      run: ant -noinput -buildfile build.xml
+
+    - name: Run Tests and Generate Report
       run: ant test-report
